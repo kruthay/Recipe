@@ -8,8 +8,12 @@
 import Foundation
 import SwiftData
 
+/// Used SwiftData to cache the API information and reduce Network requirement
+/// Didn't cache the image in SwiftData as that is inefficient
+/// I wasn't sure if Caching is required, so I avoided doing it for Images
 @Model
 class Food : Identifiable {
+    /// ID used for the model
     @Attribute(.unique) var id: Int
     
     var name: String?
@@ -31,6 +35,7 @@ class Food : Identifiable {
 }
 
 
+/// convinience init is used to migrate the data from `FoodValuesCollection.FoodInfo` to the  `Food` model
 extension Food {
     convenience init(from foodValues: FoodValuesCollection.FoodInfo) {
         self.init (
