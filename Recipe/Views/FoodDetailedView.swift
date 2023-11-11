@@ -12,75 +12,82 @@ struct FoodDetailedView: View {
     var meal: Food
     @Environment(\.modelContext) private var modelContext
     var body: some View {
-        VStack {
+        HStack {
+            Text(meal.name ?? "")
+                .font(.headline)
+                .fontWeight(.bold)
+            
+        }
+        List {
+            
             HStack {
-                Text(meal.name ?? "")
-                    .font(.headline)
-                    .fontWeight(.bold)
-                
-            }
-            List {
-                HStack {
-                    Spacer()
-                    AsyncImage(
-                        url: meal.thumbnail) {  phase in
-                            switch(phase) {
-                            case .success(let image):
-                                image.resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(maxWidth: 200, maxHeight: 200)
-                            case .failure(_):
-                                Color.clear
-                                    .frame(maxWidth: 200, maxHeight: 200)
-                            default :
-                                ProgressView()
-                                    .frame(maxWidth: 200, maxHeight: 200)
-                            }
+                Spacer()
+                AsyncImage(
+                    url: meal.thumbnail) {  phase in
+                        switch(phase) {
+                        case .success(let image):
+                            image.resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(maxWidth: 200, maxHeight: 200)
+                        case .failure(_):
+                            
+                            Color.clear
+                                .frame(maxWidth: 200, maxHeight: 200)
+                        default :
+                            ProgressView()
+                                .frame(maxWidth: 200, maxHeight: 200)
                         }
-                    Spacer()
+                    }
+                Spacer()
+            }
+            
+            Section {
+                if let instructions  = meal.instructions {
+                    Text(instructions)
+                } else {
+                    ProgressView()
                 }
                 
-                Section {
-                    if let instructions  = meal.instructions {
-                        Text(instructions)
-                    } else {
+            } header: {
+                Text("Instructions")
+            }
+            Section {
+                ScrollView {
+                    if meal.ingredientsAndMeasurements.isEmpty {
                         ProgressView()
                     }
-                    
-                } header: {
-                    Text("Instructions")
-                }
-                Section {
-                    ScrollView {
-                        if meal.ingredientsAndMeasurements.isEmpty {
-                            ProgressView()
-                        }
-                        else {
-                            ForEach(meal.ingredientsAndMeasurements.sorted(by: >), id: \.key) { key, value in
-                                HStack {
-                                    Text(key)
-                                    Spacer()
-                                    Text(value)
-                                }
-                                .padding()
+                    else {
+                        ForEach(meal.ingredientsAndMeasurements.sorted(by: >), id: \.key) { key, value in
+                            HStack {
+                                Text(key)
+                                Spacer()
+                                Text(value)
                             }
+                            .padding()
                         }
                     }
-                } header: {
-                    Text("Ingredients")
                 }
-                
+            } header: {
+                Text("Ingredients")
             }
-            .padding()
-            .task {
-                if meal.instructions == nil && meal.ingredientsAndMeasurements.isEmpty {
-                    let values = await FoodValuesCollection.getFullInfo(of: meal.id)
-                    withAnimation {
-                        (meal.instructions, meal.ingredientsAndMeasurements) = values
-                    }
+            
+        }
+        .padding()
+        .task {
+            if meal.instructions == nil && meal.ingredientsAndMeasurements.isEmpty {
+                let values = await FoodValuesCollection.getFullInfo(of: meal.id)
+                withAnimation {
+                    (meal.instructions, meal.ingredientsAndMeasurements) = values
                 }
             }
         }
     }
 }
 
+#Preview {
+    FoodDetailedView(meal: Food.init(id: 123, name: "Sample Preview", thumbnail: URL(string:"https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg"), instructions: """
+Just for the Preview purposes.
+Instructions are for the sample.
+""", ingredientsAndMeasurements: ["Milk":"100ML", "Powder":"10Oz"]))
+        .modelContainer(for: Food.self, inMemory: true)
+}

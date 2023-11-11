@@ -19,9 +19,9 @@ struct ItemView: View {
                 Text("Name Unavailable")
             }
             Spacer()
-            HStack {
+            /// Used as a temporary bug fix to AsyncImage, AsyncImage when loads more than a few Images doesn't load all of them and cancels some
+            LazyHStack {
                 Spacer()
-                
                 AsyncImage(
                     url: meal.thumbnail) {  phase in
                         switch(phase) {
@@ -37,10 +37,10 @@ struct ItemView: View {
                                 .frame(maxWidth: 50, maxHeight: 50)
                         }
                     }
-                
             }
             
         }
+        .padding()
     }
 }
 

@@ -18,7 +18,7 @@ struct HomeView: View {
                     ItemView(meal: food)
                 }
             }
-            .listStyle(GroupedListStyle())
+
             .navigationTitle("Deserts")
             
             
