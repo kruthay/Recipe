@@ -108,7 +108,7 @@
 			children = (
 				87D7C8192AFEEFEE001CC081 /* RecipeApp.swift */,
 				87D7C84F2AFEFE36001CC081 /* Views */,
-				87D7C8502AFEFE4B001CC081 /* ViewModel */,
+				87D7C8502AFEFE4B001CC081 /* Model */,
 				87D7C81F2AFEEFEF001CC081 /* Assets.xcassets */,
 				87D7C8212AFEEFEF001CC081 /* Preview Content */,
 			);
@@ -150,7 +150,7 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		87D7C8502AFEFE4B001CC081 /* ViewModel */ = {
+		87D7C8502AFEFE4B001CC081 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				87D7C81D2AFEEFEE001CC081 /* Food.swift */,
@@ -158,7 +158,7 @@
 				87D7C8492AFEF670001CC081 /* FoodDatabaseAPI.swift */,
 				87D7C8472AFEF61E001CC081 /* FoodAppErrors.swift */,
 			);
-			path = ViewModel;
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
