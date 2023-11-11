@@ -36,7 +36,8 @@ Caching wasn't a requirement but this felt like one chance to play with SwiftDat
 ## UI
 
 I haven't focused much on the UI as it wasn't required for the evaluation. 
+
 Screenshots of the App:
-![Alt text](/relative/path/to/img.jpg?raw=true "Optional Title")
-![Alt text](/relative/path/to/img.jpg?raw=true "Optional Title")
+
+<img src="/Screenshots/desserts.png" alt="Desserts" width="200"/> <img src="/Screenshots/info.png" alt="Information" width="200"/>
 
