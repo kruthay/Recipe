@@ -8,8 +8,7 @@
 import SwiftUI
 
 /// Presents a detailed food view, with, name, thumnail, instructions and igredient details
-/// 
-/// ![FoodDetailedView screen shot 1](detailedView1Screenshot) ![FoodDetailedView screen shot 2](detailedView2Screenshot)
+/// ![FoodDetailedView screen shot 1](detailedView1Screenshot)
 ///
 struct FoodDetailedView: View {
     /// `meal` is the `Food` instance, from which information is saved. This instance is binded to the SwiftData model
