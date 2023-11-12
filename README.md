@@ -1,43 +1,44 @@
-# Recipe
-This a Take home assignment Repo
+# Recipe App Take-Home Assignment
 
-The app is developed using SwiftUI, and SwiftData.
+This is a take-home assignment repository.
 
-It works on iOS 17 and later.
+The app is developed using SwiftUI and SwiftData, compatible with iOS 17 and later.
 
-
-
-
-This App uses Food Recipe API from https://themealdb.com/api.php and utilised two specific endpoints
-
-
-Main focus is on the Network API, Decoding JSON, Architecture. 
-
-
-
+It utilizes the Food Recipe API from [TheMealDB](https://themealdb.com/api.php) and focuses on two specific endpoints.
 
 ## Network
 
-FoodDatabaseAPI.swift is used for organising the endpoints in a cleaner way. 
-In case if url changes, only one point of change is necessary
-
+The `FoodDatabaseAPI.swift` organizes the endpoints for a cleaner structure. In case the URL changes, only one point of modification is necessary.
 
 ## Decoding JSON
 
-The JSON data from the API is challenging to use. It has 20 separate values for ingredients and 20 separate values for measures. 
-Utilised DynamicCodingKeys with Codable to make it as cleaner as possible
-
+Handling JSON data from the API can be challenging, especially with 20 separate values for ingredients and measures. 
+DynamicCodingKeys with Codable is used to make the decoding process cleaner. I used two different struct models for bridging the JSON encoded data and SwiftData Model. 
 
 ## Architecture
-I followed Model View architecture, started with MVVM, but when included SwiftData for caching purposes, MV made more sense than MVVM.
-Caching wasn't a requirement but this felt like one chance to play with SwiftData, as it's not ready for production any time soon.
 
+The app follows a Model-View architecture. Initially, MVVM was considered, but with the inclusion of SwiftData for caching, MV architecture made more sense. Caching wasn't a requirement, but it provided me an opportunity to experiment with SwiftData.
 
 ## UI
 
-I haven't focused much on the UI as it wasn't required for the evaluation. 
+Not much focus was given to the UI as it wasn't required for evaluation. Screenshots of the app:
 
-Screenshots of the App:
+Assumptions:
+1. I assumed caching was an important part of the application, as it reduces network connection for smoother User Experience.
+2. I haven't focussed much on Testing, primarly because of the SwiftData inclusion and it required me to write a lot of boiler-plate code. 
+Please let me know if you would like me to write some tests
+3. More documentation about each method in the Model part of the application is available in the code. Please look into it.
+
+Possible future changes:
+1. Adding Tests
+2. Improving the model to include additional API endpoints
+3. Improving UI
+
+
+Note: If some part of my code feels work around, I used those for the known bugs such as AsyncImage() returns Error when multiple images are rendered at the same time, so used LazyHStack even though it's not required, SwiftData has many such simple bugs. 
+
+
+
 
 <img src="/Screenshots/desserts.png" alt="Desserts" width="200"/> <img src="/Screenshots/info.png" alt="Information" width="200"/>
 
