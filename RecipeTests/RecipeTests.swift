@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import Recipe
+import Foundation
 
 final class RecipeTests: XCTestCase {
 

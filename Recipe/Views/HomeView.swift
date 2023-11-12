@@ -8,6 +8,9 @@
 import SwiftUI
 import SwiftData
 
+/// HomeView consists of the list of meals present in the model of the `Desserts` Category
+/// if the `Array<Food>` is empty, then Information is retrieved from the internet and saved to the local database
+/// ![Home View of the with Food App Screenshot ](listViewScreenshot)
 struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Food.name, animation: .bouncy) private var foodValues: [Food]
@@ -19,7 +22,7 @@ struct HomeView: View {
                 }
             }
 
-            .navigationTitle("Deserts")
+            .navigationTitle("Desserts")
             
             
         }

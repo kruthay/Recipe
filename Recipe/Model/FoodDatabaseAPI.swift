@@ -45,7 +45,6 @@ enum FoodDatabaseAPI: API, RawRepresentable {
 
 
 /// used to get a url value from rawValue and baseURLString strings concatenated  
-
 extension RawRepresentable where Self: API, RawValue == String {
     var url: URL? { URL(string: Self.baseURLString + rawValue) }
 }

@@ -8,12 +8,12 @@ import Foundation
 import SwiftData
 
 /// FoodValuesCollection is a struct mainly used for bridging JSON data API with SwiftData Model.
-/// This is used for the outer layer that contains "meals" container
 struct FoodValuesCollection: Codable {
     
+    /// `meals` is the outer contianer of the API's JSON object
     let meals: [FoodInfo]
     
-    /// this struct has the actual data with information about food
+    /// Used to decode the inner container information about food
     struct FoodInfo: Codable {
         
         /// API's id is made of String but it's typecasted for convinience. This has to be available to conform to `Identifiable`
@@ -28,11 +28,10 @@ struct FoodValuesCollection: Codable {
         /// used to get the image url
         let strMealThumb: URL?
         
-        /// the ingredients and measures are given as 20 different values for each. So, I used an individual dictionary to properly format those values.
+        /// the ingredients and measures are given as 20 different values for each. This property stores all those values from the API
         var strIngredientsAndMeasures : [String : String]
         
-        /// CodingKeys are for straightforward API keys.
-        
+        /// CodingKeys enum is for non-dynamic simple API container keys.
         private enum CodingKeys: String, CodingKey {
             case id = "idMeal"
             case strMeal
@@ -55,12 +54,12 @@ struct FoodValuesCollection: Codable {
         }
         
         /// the init is used by the `JSONDecoder` to retrieve the values based on the keys
-        
         init(from decoder: Decoder) throws {
             do {
                 
-                /// this container is for regular keys available as they are in the API
+                /// `container` is used for simpler regular keys, that are available with the same value in the API
                 let container = try decoder.container(keyedBy: CodingKeys.self)
+                
                 let idMeal = try container.decode(String.self, forKey: .id)
                 if let id = Int(idMeal) {
                     self.id = id
@@ -78,17 +77,13 @@ struct FoodValuesCollection: Codable {
             
             
             do {
-                /// this is to get the dynamic values for measures and ingredients, using `DynamicCodingKeys`
+                /// the `dynamicValuesContainer` is keyed using `DynamicCodingKeys` to get the dynamic values for measures and ingredients
                 let dynamicValuesContainer = try decoder.container(keyedBy: DynamicCodingKeys.self)
                 var strIngredients : [Int : String] = [:]
                 var strMeasures : [Int : String] = [:]
                 var strIngredientsAndMeasures : [String : String] = [:]
                 
                 for key in dynamicValuesContainer.allKeys {
-                    /// a static function `getIntValueFromStringSuffix(stringValue:String)` is used to get the incremental value at the end of eachKey and the values for ingredients and measures.
-                    /// prefix and suffix values are used to get the ingredient and measure values
-                    /// Please check the API for more details
-
                     if let keyIterator = getIntValueFromStringSuffix(stringValue: key.stringValue) {
                         
                         if let value = try? dynamicValuesContainer.decode(String.self, forKey: key) {
@@ -136,9 +131,10 @@ extension FoodValuesCollection.FoodInfo : Identifiable {}
 /// This extension consits of various static methods to fetchvalues and to help with initialisation
 extension FoodValuesCollection {
     
-    /// this function fetches meal values of the category and returns the `Array<FoodInfo>`
+    /// This static method fetches meal values of the category and returns the `Array<FoodInfo>`
     /// - Parameters:
-    /// category: `String` with a default value of "Dessert"
+    ///    - category: `String` with a default value of "Dessert"
+    /// - Returns: Array of meals in the given category.
     static func fetchBriefMealValues(_ category: String = "Dessert") async throws -> [FoodInfo] {
         guard let baseURL = FoodDatabaseAPI.getMealsFrom(category: category).url else {
             throw FoodAppErrors.invalidURL
@@ -159,7 +155,7 @@ extension FoodValuesCollection {
     }
     /// The function is annotated with @MainActor, due to the parameter modelContext
     /// This method calls `fetchBriefMealValues()` to get the mealValues and inserts them to the `SwiftData` Food model
-    /// Saves the ModelContext for persistence
+    /// - Parameters: modelContext, contains the SwiftData modelContext, used for insertion and saving the Database.
     @MainActor
     static func getBriefFoodInfo(modelContext: ModelContext) async {
         do {
@@ -179,7 +175,8 @@ extension FoodValuesCollection {
     
     /// uses `FoodDatabaseAPI` to get the URL and gets the JSON data from it
     ///  Decodes JSON data based on the `FoodValuesCollection` struct
-    /// returns `FoodInfo`
+    /// - Returns: `FoodInfo` instance, that consists of the meal value of the instance
+    /// - Throws: Error if URL is invalid or if HTTP response is bad or if Unable to decode the data
     
     static func getEachMealValue(id: Int) async throws -> FoodInfo  {
         guard let baseURL = FoodDatabaseAPI.getMealWith(id: id).url else {
@@ -201,8 +198,10 @@ extension FoodValuesCollection {
         
     }
     
-    /// Returns Instructions, IngredientAndMeasures by getting the `FoodInfo` value from `getEachMealValue(id:Int)`
-    /// Due to an error with SwiftData, when new inserts are made, the old value is not upserted, instead duplicate values are formed. Even if unique atrribute constraint is provided
+    /// Due to an error with SwiftData, when new inserts are made, the old value is not upserted, instead duplicate values are formed. Even if unique atrribute constraint is provided. Hence this method is used as a temporary bug fix
+    /// - Parameters:
+    ///  - id: `Int` value, used to identify each meal in the API
+    /// - Returns: A tuple with Instructions and Ingredients and Measures derived from the meal
     
     static func getFullInfo(of id: Int) async -> (String?, [String:String]) {
         do {
@@ -215,6 +214,13 @@ extension FoodValuesCollection {
     }
     
     /// Helper function to get the `Int?` value from last two or one character of a `String`
+    /// a static function `getIntValueFromStringSuffix(stringValue:String)` is used to get the incremental value at the end of eachKey and the values for ingredients and measures.
+    /// prefix and suffix values are used to get the ingredient and measure values
+    /// Please check the API for more details
+    /// - Parameters:
+    ///    - stringValue: a String which could contain last two values as numeric
+    /// - Returns: the integer value at the end of the string.
+
     static func getIntValueFromStringSuffix(stringValue: String) -> Int? {
         if let intValue = Int(stringValue.suffix(2)) {
             return intValue

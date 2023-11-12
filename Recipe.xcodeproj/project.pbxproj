@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		87CC0C8D2B0154F00039B795 /* Documentation.docc in Sources */ = {isa = PBXBuildFile; fileRef = 87CC0C8C2B0154F00039B795 /* Documentation.docc */; };
 		87D7C81A2AFEEFEE001CC081 /* RecipeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D7C8192AFEEFEE001CC081 /* RecipeApp.swift */; };
 		87D7C81C2AFEEFEE001CC081 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D7C81B2AFEEFEE001CC081 /* HomeView.swift */; };
 		87D7C81E2AFEEFEE001CC081 /* Food.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D7C81D2AFEEFEE001CC081 /* Food.swift */; };
@@ -40,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		87CC0C8C2B0154F00039B795 /* Documentation.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = Documentation.docc; sourceTree = "<group>"; };
 		87D7C8162AFEEFEE001CC081 /* Recipe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recipe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		87D7C8192AFEEFEE001CC081 /* RecipeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeApp.swift; sourceTree = "<group>"; };
 		87D7C81B2AFEEFEE001CC081 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				87D7C8192AFEEFEE001CC081 /* RecipeApp.swift */,
+				87CC0C8C2B0154F00039B795 /* Documentation.docc */,
 				87D7C84F2AFEFE36001CC081 /* Views */,
 				87D7C8502AFEFE4B001CC081 /* Model */,
 				87D7C81F2AFEEFEF001CC081 /* Assets.xcassets */,
@@ -295,6 +298,7 @@
 				87D7C8482AFEF61E001CC081 /* FoodAppErrors.swift in Sources */,
 				87D7C81C2AFEEFEE001CC081 /* HomeView.swift in Sources */,
 				87D7C8462AFEF56A001CC081 /* FoodValuesCollection.swift in Sources */,
+				87CC0C8D2B0154F00039B795 /* Documentation.docc in Sources */,
 				87D7C81E2AFEEFEE001CC081 /* Food.swift in Sources */,
 				87D7C84C2AFEF710001CC081 /* ItemView.swift in Sources */,
 				87D7C81A2AFEEFEE001CC081 /* RecipeApp.swift in Sources */,
