@@ -52,10 +52,10 @@ extension Food {
     convenience init(from foodValues: FoodValuesCollection.FoodInfo) {
         self.init (
             id: foodValues.id,
-            name: foodValues.strMeal,
-            thumbnail: foodValues.strMealThumb,
-            instructions: foodValues.strInstructions,
-            ingredientsAndMeasurements: foodValues.strIngredientsAndMeasures
+            name: foodValues.meal,
+            thumbnail: foodValues.thumbnailImageURL,
+            instructions: foodValues.instructions,
+            ingredientsAndMeasurements: foodValues.ingredientsAndMeasures
         )
     }
 }

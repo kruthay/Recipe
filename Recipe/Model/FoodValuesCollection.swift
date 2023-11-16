@@ -20,23 +20,23 @@ struct FoodValuesCollection: Codable {
         let id : Int
         
         /// strMeal is the name of the string, can be optional
-        let strMeal : String?
+        let meal : String?
         
         /// strInstructions are present only in the detailed API
-        let strInstructions: String?
+        let instructions: String?
         
         /// used to get the image url
-        let strMealThumb: URL?
+        let thumbnailImageURL: URL?
         
         /// the ingredients and measures are given as 20 different values for each. This property stores all those values from the API
-        var strIngredientsAndMeasures : [String : String]
+        var ingredientsAndMeasures : [String : String]
         
         /// CodingKeys enum is for non-dynamic simple API container keys.
         private enum CodingKeys: String, CodingKey {
             case id = "idMeal"
-            case strMeal
-            case strInstructions
-            case strMealThumb
+            case meal = "strMeal"
+            case instructions = "strInstructions"
+            case thumbnailImageURL = "strMealThumb"
         }
         
         /// DynamicCodingKeys are for ingredients and measures.
@@ -67,9 +67,9 @@ struct FoodValuesCollection: Codable {
                     throw FoodAppErrors.invalidId
                 }
                 
-                self.strMeal = try container.decodeIfPresent(String.self, forKey: .strMeal)
-                self.strInstructions = try container.decodeIfPresent(String.self, forKey: .strInstructions)
-                self.strMealThumb = try container.decodeIfPresent(URL.self, forKey: .strMealThumb)
+                self.meal = try container.decodeIfPresent(String.self, forKey: .meal)
+                self.instructions = try container.decodeIfPresent(String.self, forKey: .instructions)
+                self.thumbnailImageURL = try container.decodeIfPresent(URL.self, forKey: .thumbnailImageURL)
             }
             catch {
                 throw FoodAppErrors.codingKeyError(error: error)
@@ -79,9 +79,9 @@ struct FoodValuesCollection: Codable {
             do {
                 /// the `dynamicValuesContainer` is keyed using `DynamicCodingKeys` to get the dynamic values for measures and ingredients
                 let dynamicValuesContainer = try decoder.container(keyedBy: DynamicCodingKeys.self)
-                var strIngredients : [Int : String] = [:]
-                var strMeasures : [Int : String] = [:]
-                var strIngredientsAndMeasures : [String : String] = [:]
+                var ingredients : [Int : String] = [:]
+                var measures : [Int : String] = [:]
+                var ingredientsAndMeasures : [String : String] = [:]
                 
                 for key in dynamicValuesContainer.allKeys {
                     if let keyIterator = getIntValueFromStringSuffix(stringValue: key.stringValue) {
@@ -89,10 +89,10 @@ struct FoodValuesCollection: Codable {
                         if let value = try? dynamicValuesContainer.decode(String.self, forKey: key) {
                             if !value.isEmpty {
                                 if key.stringValue.hasPrefix("strMeasure") {
-                                    strMeasures[keyIterator] = value
+                                    measures[keyIterator] = value
                                 }
                                 else  if key.stringValue.hasPrefix("strIngredient") {
-                                    strIngredients[keyIterator] = value
+                                    ingredients[keyIterator] = value
                                 }
                             }
                         }
@@ -100,20 +100,20 @@ struct FoodValuesCollection: Codable {
                 }
                 
                 /// Dictionary of ingredients and values is formed and initialised
-                for key in strMeasures.keys {
-                    if let ingredient = strIngredients[key] {
+                for key in measures.keys {
+                    if let ingredient = ingredients[key] {
                         if ingredient.isEmpty {
                             continue
                         }
-                        if let measure = strMeasures[key] {
+                        if let measure = measures[key] {
                             if measure.isEmpty {
                                 continue
                             }
-                            strIngredientsAndMeasures[ingredient] = measure
+                            ingredientsAndMeasures[ingredient] = measure
                         }
                     }
                 }
-                self.strIngredientsAndMeasures = strIngredientsAndMeasures
+                self.ingredientsAndMeasures = ingredientsAndMeasures
             }
             catch {
                 throw FoodAppErrors.dynamicKeyError(error: error)
@@ -206,7 +206,7 @@ extension FoodValuesCollection {
     static func getFullInfo(of id: Int) async -> (String?, [String:String]) {
         do {
             let mealValue = try await getEachMealValue(id: id)
-            return (mealValue.strInstructions, mealValue.strIngredientsAndMeasures)
+            return (mealValue.instructions, mealValue.ingredientsAndMeasures)
         } catch {
             print(id, error)
         }
