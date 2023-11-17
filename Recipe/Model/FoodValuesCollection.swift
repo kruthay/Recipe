@@ -98,7 +98,6 @@ struct FoodValuesCollection: Codable {
                         }
                     }
                 }
-                
                 /// Dictionary of ingredients and values is formed and initialised
                 for key in measures.keys {
                     if let ingredient = ingredients[key] {
@@ -130,89 +129,12 @@ extension FoodValuesCollection.FoodInfo : Identifiable {}
 
 /// This extension consits of various static methods to fetchvalues and to help with initialisation
 extension FoodValuesCollection {
+
+
     
-    /// This static method fetches meal values of the category and returns the `Array<FoodInfo>`
-    /// - Parameters:
-    ///    - category: `String` with a default value of "Dessert"
-    /// - Returns: Array of meals in the given category.
-    static func fetchBriefMealValues(_ category: String = "Dessert") async throws -> [FoodInfo] {
-        guard let baseURL = FoodDatabaseAPI.getMealsFrom(category: category).url else {
-            throw FoodAppErrors.invalidURL
-        }
-        
-        let (data, response) = try await URLSession.shared.data(from: baseURL)
-        
-        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-            throw FoodAppErrors.invalidResponse
-        }
-        do {
-            let decodedResponse = try JSONDecoder().decode(FoodValuesCollection.self, from: data)
-            return decodedResponse.meals
-        }
-        catch {
-            throw FoodAppErrors.invalidData(error: error)
-        }
-    }
-    /// The function is annotated with @MainActor, due to the parameter modelContext
-    /// This method calls `fetchBriefMealValues()` to get the mealValues and inserts them to the `SwiftData` Food model
-    /// - Parameters: modelContext, contains the SwiftData modelContext, used for insertion and saving the Database.
-    @MainActor
-    static func getBriefFoodInfo(modelContext: ModelContext) async {
-        do {
-            let mealValues = try await fetchBriefMealValues()
-            
-            for mealValue in mealValues {
-                let food = Food(from: mealValue)
-                modelContext.insert(food)
-            }
-            
-            try modelContext.save()
-            
-        } catch {
-            print("Error in getBreifFoodInfo()", error)
-        }
-    }
-    
-    /// uses `FoodDatabaseAPI` to get the URL and gets the JSON data from it
-    ///  Decodes JSON data based on the `FoodValuesCollection` struct
-    /// - Returns: `FoodInfo` instance, that consists of the meal value of the instance
-    /// - Throws: Error if URL is invalid or if HTTP response is bad or if Unable to decode the data
-    
-    static func getEachMealValue(id: Int) async throws -> FoodInfo  {
-        guard let baseURL = FoodDatabaseAPI.getMealWith(id: id).url else {
-            throw FoodAppErrors.invalidURL
-        }
-        let (data, response) = try await URLSession.shared.data(from: baseURL)
-        
-        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-            throw FoodAppErrors.invalidResponse
-        }
-        
-        do {
-            let decodedResponse = try JSONDecoder().decode(FoodValuesCollection.self, from: data)
-            return decodedResponse.meals.first!
-        }
-        catch {
-            throw FoodAppErrors.invalidFoodDetailedData(error: error)
-        }
-        
-    }
-    
-    /// Due to an error with SwiftData, when new inserts are made, the old value is not upserted, instead duplicate values are formed. Even if unique atrribute constraint is provided. Hence this method is used as a temporary bug fix
-    /// - Parameters:
-    ///  - id: `Int` value, used to identify each meal in the API
-    /// - Returns: A tuple with Instructions and Ingredients and Measures derived from the meal
-    
-    static func getFullInfo(of id: Int) async -> (String?, [String:String]) {
-        do {
-            let mealValue = try await getEachMealValue(id: id)
-            return (mealValue.instructions, mealValue.ingredientsAndMeasures)
-        } catch {
-            print(id, error)
-        }
-        return (nil, [:])
-    }
-    
+}
+
+extension FoodValuesCollection {
     /// Helper function to get the `Int?` value from last two or one character of a `String`
     /// a static function `getIntValueFromStringSuffix(stringValue:String)` is used to get the incremental value at the end of eachKey and the values for ingredients and measures.
     /// prefix and suffix values are used to get the ingredient and measure values
@@ -221,7 +143,7 @@ extension FoodValuesCollection {
     ///    - stringValue: a String which could contain last two values as numeric
     /// - Returns: the integer value at the end of the string.
 
-    static func getIntValueFromStringSuffix(stringValue: String) -> Int? {
+     static func getIntValueFromStringSuffix(stringValue: String) -> Int? {
         if let intValue = Int(stringValue.suffix(2)) {
             return intValue
         } else if let intValue = Int(stringValue.suffix(1)) {
@@ -229,5 +151,5 @@ extension FoodValuesCollection {
         }
         return nil
     }
-}
 
+}

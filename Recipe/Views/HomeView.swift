@@ -26,17 +26,34 @@ struct HomeView: View {
             
             
         }
-//        .refreshable {
-//            await MealsCollection.getBriefFoodInfo(modelContext: modelContext)
-//        }
+
         .task {
             if foodValues.isEmpty {
-                await FoodValuesCollection.getBriefFoodInfo(modelContext: modelContext)
+                await getBriefFoodInfo(category: "Dessert")
             }
         }
         
     }
+}
 
+extension HomeView {
+    func getBriefFoodInfo(category: String) async {
+        do {
+            let service: FoodService = FoodService()
+            let foodResponse = try await service.getMealsFrom(category: category)
+            let mealValues = foodResponse.meals
+            for mealValue in mealValues {
+                let food = Food(from: mealValue)
+                modelContext.insert(food)
+            }
+            
+            try modelContext.save()
+            
+        } catch {
+            print("Error in getBreifFoodInfo()", error)
+        }
+    }
+    
 }
 
 #Preview {

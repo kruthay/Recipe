@@ -34,4 +34,6 @@ enum FoodAppErrors: Error {
     
     /// can be used for simpler coding keys
     case codingKeyError(error: Error)
+    
+    case unknown
 }

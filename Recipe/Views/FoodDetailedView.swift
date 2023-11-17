@@ -77,7 +77,7 @@ struct FoodDetailedView: View {
                 .padding()
                 .task {
                     if meal.instructions == nil && meal.ingredientsAndMeasurements.isEmpty {
-                        let values = await FoodValuesCollection.getFullInfo(of: meal.id)
+                        let values = await getFullInfo(of: meal.id)
                         withAnimation {
                             (meal.instructions, meal.ingredientsAndMeasurements) = values
                         }
@@ -85,6 +85,26 @@ struct FoodDetailedView: View {
                 }
             }
         }
+    }
+}
+
+extension FoodDetailedView {
+    /// Due to an error with SwiftData, when new inserts are made, the old value is not upserted, instead duplicate values are formed. Even if unique atrribute constraint is provided. Hence this method is used as a temporary bug fix
+    /// - Parameters:
+    ///  - id: `Int` value, used to identify each meal in the API
+    /// - Returns: A tuple with Instructions and Ingredients and Measures derived from the meal
+    
+     func getFullInfo(of id: Int) async -> (String?, [String:String]) {
+        
+        do {
+            let service: FoodService = FoodService()
+            let foodResponse = try await service.getMealWith(id: id)
+            let mealValue = foodResponse.meals.first!
+            return (mealValue.instructions, mealValue.ingredientsAndMeasures)
+        } catch {
+            print(id, error)
+        }
+        return (nil, [:])
     }
 }
 
