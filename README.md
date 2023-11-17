@@ -3,7 +3,7 @@
 This is a take-home assignment repository.
 
 Result: Not Selected.
-
+UPDATE: 
 Feedback: 
 1. UI not compatible with all devices. Update: Made changes using GeometryReader
 2. Not used generic network layer. Update: Changed the network layer to make it generic
