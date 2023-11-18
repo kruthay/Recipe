@@ -81,11 +81,9 @@ struct FoodValuesCollection: Codable {
                 let dynamicValuesContainer = try decoder.container(keyedBy: DynamicCodingKeys.self)
                 var ingredients : [Int : String] = [:]
                 var measures : [Int : String] = [:]
-                var ingredientsAndMeasures : [String : String] = [:]
                 
                 for key in dynamicValuesContainer.allKeys {
                     if let keyIterator = getIntValueFromStringSuffix(stringValue: key.stringValue) {
-                        
                         if let value = try? dynamicValuesContainer.decode(String.self, forKey: key) {
                             if !value.isEmpty {
                                 if key.stringValue.hasPrefix("strMeasure") {
@@ -98,21 +96,8 @@ struct FoodValuesCollection: Codable {
                         }
                     }
                 }
-                /// Dictionary of ingredients and values is formed and initialised
-                for key in measures.keys {
-                    if let ingredient = ingredients[key] {
-                        if ingredient.isEmpty {
-                            continue
-                        }
-                        if let measure = measures[key] {
-                            if measure.isEmpty {
-                                continue
-                            }
-                            ingredientsAndMeasures[ingredient] = measure
-                        }
-                    }
-                }
-                self.ingredientsAndMeasures = ingredientsAndMeasures
+                
+                self.ingredientsAndMeasures = mergeTwoDictionariesWithSameKeysIntoOne(keyDictionary: ingredients, valueDictionary: measures)
             }
             catch {
                 throw FoodAppErrors.dynamicKeyError(error: error)
@@ -126,13 +111,6 @@ struct FoodValuesCollection: Codable {
 /// Extension to confrorm to identifiable, if changes are needed in the future
 extension FoodValuesCollection.FoodInfo : Identifiable {}
 
-
-/// This extension consits of various static methods to fetchvalues and to help with initialisation
-extension FoodValuesCollection {
-
-
-    
-}
 
 extension FoodValuesCollection {
     /// Helper function to get the `Int?` value from last two or one character of a `String`
@@ -150,6 +128,25 @@ extension FoodValuesCollection {
             return intValue
         }
         return nil
+    }
+    
+    
+    /// Helper function, it takes two dictionaries with same keys and returns a new dictionary with `keyDicionary` values as keys and `valueDictionary` values as values
+    /// - Parameters:
+    ///    - keyDictionary: the values of this dictionary are used as keys
+    ///    - valueDictionary: the values of this dictionary are used as values
+    /// - Returns: A Dictionary with merged values.
+    static func mergeTwoDictionariesWithSameKeysIntoOne<T,X,Y>(keyDictionary: [T:X] , valueDictionary: [T:Y] ) -> [X:Y]{
+        var output : [X:Y] = [:]
+        for keyIterator in keyDictionary.keys {
+            if let key = keyDictionary[keyIterator] {
+                if let value = valueDictionary[keyIterator] {
+                    output[key] = value
+                }
+            }
+        }
+        return output
+        
     }
 
 }
