@@ -2,6 +2,14 @@
 
 This is a take-home assignment repository.
 
+Result: Not Selected.
+UPDATE: 
+Feedback: 
+1. UI not compatible with all devices. Update: Made changes using GeometryReader
+2. Not used generic network layer. Update: Changed the network layer to make it generic
+3. Used naming convention from API. Update: Changed the naming for the Model to suit the app.
+4. Unit Tests. Update: In Progress
+
 The app is developed using SwiftUI and SwiftData, compatible with iOS 17 and later.
 
 It utilizes the Food Recipe API from [TheMealDB](https://themealdb.com/api.php) and focuses on two specific endpoints.
