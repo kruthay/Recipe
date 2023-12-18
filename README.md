@@ -1,14 +1,4 @@
-# Recipe App Take-Home Assignment
-
-This is a take-home assignment repository.
-
-Result: Not Selected.
-UPDATE: 
-Feedback: 
-1. UI not compatible with all devices. Update: Made changes using GeometryReader
-2. Not used generic network layer. Update: Changed the network layer to make it generic
-3. Used naming convention from API. Update: Changed the naming for the Model to suit the app.
-4. Unit Tests. Update: In Progress
+# Recipe App
 
 The app is developed using SwiftUI and SwiftData, compatible with iOS 17 and later.
 
@@ -25,17 +15,10 @@ DynamicCodingKeys with Codable is used to make the decoding process cleaner. I u
 
 ## Architecture
 
-The app follows a Model-View architecture. Initially, MVVM was considered, but with the inclusion of SwiftData for caching, MV architecture made more sense. Caching wasn't a requirement, but it provided me an opportunity to experiment with SwiftData.
+The app follows a Model-View architecture. Initially, MVVM was considered, but with the inclusion of SwiftData for caching, MV architecture made more sense. 
 
 ## UI
 
-Not much focus was given to the UI as it wasn't required for evaluation. Screenshots of the app:
-
-Assumptions:
-1. I assumed caching was an important part of the application, as it reduces network connection for smoother User Experience.
-2. I haven't focussed much on Testing, primarly because of the SwiftData inclusion and it required me to write a lot of boiler-plate code. 
-Please let me know if you would like me to write some tests
-3. More documentation about each method in the Model part of the application is available in the code. Please look into it.
 
 Possible future changes:
 1. Adding Tests
